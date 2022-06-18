@@ -1,6 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-from tabulate import tabulate
 
 url = requests.get("https://www.sbs.gob.pe/app/pp/SISTIP_PORTAL/Paginas/Publicacion/TipoCambioPromedio.aspx")
 
@@ -18,7 +17,6 @@ def grabarMonedas(monedas):
 def scrapping_tipocambio():
     try:
         (url.status_code == 200)
-        print("pagina encontrada")
         html = BeautifulSoup(url.text,'html.parser')
         listaMonedas = []
         for i in range(7):
@@ -32,14 +30,6 @@ def scrapping_tipocambio():
                 'venta': venta.get_text()
             }
             listaMonedas.append(dictMoneda)
-
-        columnas = ["Moneda","Compra","Venta"]
-        tablaMonedas = [moneda.values() for moneda in listaMonedas]
-        print(tabulate(tablaMonedas, headers=columnas,tablefmt="grid"))
-        strMonedas = grabarMonedas(listaMonedas)
-        fw = open('monedas.csv','w')
-        fw.write(strMonedas)
-        fw.close()
       
     except:
      print("error " + str(url.status_code))
